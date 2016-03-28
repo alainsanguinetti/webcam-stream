@@ -1,0 +1,33 @@
+name: webcam-stream
+version: 1
+vendor: Alain <alain@sanguinetti.eu>
+summary: Webcam streaming using mjpeg
+description: Exposes my webcam over a web UI
+icon: icon.png
+
+apps:
+    webcam-stream:
+        command: bin/webcam-stream
+        daemon: simple
+
+parts:
+    cam:
+        plugin: go
+        source: ./my-server/
+        stage-packages:
+            - fswebcam
+        filesets:
+            fswebcam:
+                - usr/bin/fswebcam
+                - lib
+                - usr/lib
+            go-server:
+                - bin/golang-*
+        snap:
+            - $fswebcam
+            - $go-server
+    glue:
+        plugin: copy
+        files:
+            webcam-stream: bin/webcam-stream
+
